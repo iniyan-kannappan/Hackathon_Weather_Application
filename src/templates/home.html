@@ -1,8 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<form method="POST">
+{% if form %}
+    <form method="POST">
     {{form.hidden_tag()}}
     {{form.zip.label}}{{form.zip}}
     {{form.submit()}}
-</form>
+    </form>
+{% endif %}
+
+{% if not form %}
+    <div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">Weather in {{nec['name']}}</h5>
+        <p class="card-text">The weather in {{nec['name']}} has a temp of {{nec['temp']}}.  The lowest temperature today is {{nec['temp_min']}} and the highest is {{nec['temp_max']}}. The description for today has {{nec['description']}}.</p>
+    </div>
+    </div>
+{% endif %}
+
 {% endblock %}

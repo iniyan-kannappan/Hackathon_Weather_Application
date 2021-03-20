@@ -34,8 +34,9 @@ class Form(FlaskForm):
 def index():
     form=Form()
     if form.validate_on_submit():
-        print(weather_api(form.zip.data))
-        return redirect(url_for('index'))
+        weather=weather_api(form.zip.data)
+        nec={'description':weather['weather'][0]['description'],'temp':weather['main']['temp'],'temp_min':weather['main']['temp_min'],'temp_max':weather['main']['temp_max'],'name':weather['name']}
+        return render_template('home.html',weather=weather,nec=nec)
     return render_template('home.html',form=form)
 
 if __name__ == '__main__':
