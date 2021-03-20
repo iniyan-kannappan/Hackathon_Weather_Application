@@ -91,7 +91,7 @@ def login():
             next=request.args.get('next')
 
             if next == None or not next[0]=='/':
-                next=url_for('profile')
+                next=url_for('index')
             return redirect(next)
     return render_template('login.html',form=form)
 
