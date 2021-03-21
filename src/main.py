@@ -87,7 +87,6 @@ def login():
         print('User is ',user.username)
         if user.check_password(form.password.data) and user != None:
             login_user(user)
-            flash('Logged in Successfully!')
             next=request.args.get('next')
 
             if next == None or not next[0]=='/':
