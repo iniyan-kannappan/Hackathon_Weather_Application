@@ -1,15 +1,10 @@
-import os
-# To grab directory names and file path names
-from flask import Flask, redirect, render_template, url_for, request, flash, abort
+from flask import Flask, redirect, render_template, url_for, request
 from flask_login import login_user,login_required,logout_user
 from forms import LoginForm,RegistrationForm
 from weather import weather_api
 from forms import Form
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from werkzeug.security import generate_password_hash, check_password_hash
 import os
-from flask import Flask
+# To grab directory names and file path names
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -76,7 +71,6 @@ def profile():
 @login_required
 def logout():
     logout_user()
-    flash('You have logged out!')
     return redirect(url_for('index'))
 
 @app.route('/login',methods=['GET','POST'])
@@ -101,7 +95,6 @@ def register():
         user=User(email=form.email.data, username=form.username.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash("Thanks for registering!")
         return redirect(url_for('index'))
     return render_template('register.html',form=form)
 
