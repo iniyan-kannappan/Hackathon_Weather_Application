@@ -4,23 +4,26 @@ from forms import LoginForm,RegistrationForm
 from weather import weather_api
 from forms import Form
 import os
-# To grab directory names and file path names
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 
+# Used in in-built flask auth
 login_manager=LoginManager()
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
 
+# Creates a Flask application
 app=Flask(__name__)
 
+# Creates a SQLAlchemy Database
 db=SQLAlchemy(app)
 
+# Creates a Model for the Database
 class User(db.Model,UserMixin):
     __tablename__='users'
     id=db.Column(db.Integer,primary_key=True)
@@ -37,18 +40,17 @@ class User(db.Model,UserMixin):
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)
 
-
-
-
+# Configures the app, database, and modifications
 app.config['SECRET_KEY']='mysecretkey'
-basedir=os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///'+os.path.join(basedir,'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
+# Will migrate the database
 Migrate(app,db)
 login_manager.init_app(app)
 login_manager.login_view='login'
 
+# View for homepage
 @app.route('/',methods=['GET', 'POST'])
 def index():
     form=Form()
@@ -62,12 +64,14 @@ def index():
         return render_template('home.html',nec=nec)
     return render_template('home.html',form=form)
 
+# View for logout
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# View for login
 @app.route('/login',methods=['GET','POST'])
 def login():
     form=LoginForm()
@@ -83,6 +87,7 @@ def login():
             return redirect(next)
     return render_template('login.html',form=form)
 
+# View for register
 @app.route('/register',methods=['GET','POST'])
 def register():
     form=RegistrationForm()
@@ -90,8 +95,9 @@ def register():
         user=User(email=form.email.data, username=form.username.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
     return render_template('register.html',form=form)
 
+# For Running the application
 if __name__ == '__main__':
     app.run(debug=True)
