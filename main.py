@@ -62,11 +62,6 @@ def index():
         return render_template('home.html',nec=nec)
     return render_template('home.html',form=form)
 
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html')
-
 @app.route('/logout')
 @login_required
 def logout():
