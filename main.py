@@ -90,7 +90,7 @@ def register():
         user=User(email=form.email.data, username=form.username.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('/'))
+        return redirect(url_for('index'))
     return render_template('register.html',form=form)
 
 if __name__ == '__main__':
