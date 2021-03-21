@@ -17,6 +17,10 @@ login_manager=LoginManager()
 def load_user(user_id):
     return User.query.get(user_id)
 
+# To create your base directory
+# __file__ --> main.py
+basedir=os.path.abspath(os.path.dirname(__file__))
+
 # Creates a Flask application
 app=Flask(__name__)
 
