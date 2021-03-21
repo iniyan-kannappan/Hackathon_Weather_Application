@@ -102,7 +102,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash("Thanks for registering!")
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     return render_template('register.html',form=form)
 
 if __name__ == '__main__':
